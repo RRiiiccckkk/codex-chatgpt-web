@@ -10,9 +10,13 @@ editing Codex configuration, or opening a new issue.
    profile and launcher configuration.
 2. In the launcher, confirm that ChatGPT sign-in, the browser smoke test, and **Install models** (or
    **Repair Codex setup**) are green.
-3. Fully quit Codex, including its background process, and reopen it. Signing out, closing only the
-   window, or starting another task does not reload the model catalog. Keep the launcher open.
-4. Select a **ChatGPT Web — …** model from Codex's model picker.
+3. Fully quit the Codex desktop host, including its background process, and reopen it. On macOS the
+   host may be named **ChatGPT** in the menu bar or Activity Monitor; quit that app with **Cmd-Q**.
+   On Windows, exit the desktop app from its tray menu and wait for its bundled Codex helpers to
+   exit. Signing out, closing only the window, or starting another task does not reload the model
+   catalog. Keep the launcher open.
+4. Open Codex's model picker once, then select a **ChatGPT Web — …** model. Opening the picker sends
+   the catalog request that lets the launcher verify step 3.
 5. Run **Settings → Run doctor**. If the problem remains, reproduce it once and immediately use
    **Activity → Export safe log**.
 
@@ -23,7 +27,12 @@ log are more useful than another reinstall.
 
 **Install models** updates the Codex route, but a running Codex process keeps its old model catalog.
 Fully quit every Codex Desktop window and Codex CLI process, then reopen Codex while the launcher is
-still running. The launcher should move from **Restart Codex** to a verified catalog state.
+still running. Open the model picker once so the new process requests `/v1/models`; the launcher
+should then move from **Restart Codex** to a verified catalog state.
+
+If the warning remains after that request, check **Activity → Export safe log** and the local
+`/healthz` entry for `successful_model_catalog_requests`. A value of `0` means the desktop host has
+not reached the installed catalog route yet, so another reinstall will not add useful evidence.
 
 If the models still do not appear:
 
