@@ -100,10 +100,11 @@ Chrome/Chromium、系统级 Node/Bun，也不会由本项目另行下载浏览�
 ```bash
 git clone https://github.com/miuuyy/codex-chatgpt-web.git && \
 cd codex-chatgpt-web && \
+bun install --frozen-lockfile && \
 bun run app
 ```
 
-源码方式需要 Bun 1.4.0。该命令会安装锁定版本的依赖并打开应用。
+源码方式需要 Bun 1.4.0。请先运行 `bun install --frozen-lockfile` 安装锁定版本的依赖，再运行 `bun run app` 打开应用。
 
 ## 模式
 
