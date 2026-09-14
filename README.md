@@ -107,11 +107,10 @@ model API key, installed Chrome/Chromium, system Node/Bun, or project-managed br
 ```bash
 git clone https://github.com/miuuyy/codex-chatgpt-web.git && \
 cd codex-chatgpt-web && \
-bun install --frozen-lockfile && \
 bun run app
 ```
 
-This source path requires Bun 1.4.0. Install the locked dependencies with `bun install --frozen-lockfile`, then run `bun run app` to open the app.
+This source path requires Bun 1.4.0. `bun run app` installs the locked dependencies in the repository and `launcher/` before opening the app.
 
 ## Modes
 
