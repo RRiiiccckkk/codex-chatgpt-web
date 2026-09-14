@@ -11,10 +11,11 @@ editing Codex configuration, or opening a new issue.
 2. In the launcher, confirm that ChatGPT sign-in, the browser smoke test, and **Install models** (or
    **Repair Codex setup**) are green.
 3. Fully quit the Codex desktop host, including its background process, and reopen it. On macOS the
-   host may be named **ChatGPT** in the menu bar or Activity Monitor; quit that app with **Cmd-Q**.
-   On Windows, exit the desktop app from its tray menu and wait for its bundled Codex helpers to
-   exit. Signing out, closing only the window, or starting another task does not reload the model
-   catalog. Keep the launcher open.
+   host may be named **ChatGPT**; use **ChatGPT → Quit ChatGPT (Cmd-Q)**, then confirm in Activity
+   Monitor that the ChatGPT app and its bundled Codex helpers have exited. On Windows, exit the
+   desktop app from its tray menu and wait for its bundled Codex helpers to exit. Signing out,
+   closing only the window, or starting another task does not reload the model catalog. Keep the
+   launcher open.
 4. Open Codex's model picker once, then select a **ChatGPT Web — …** model. Opening the picker sends
    the catalog request that lets the launcher verify step 3.
 5. Run **Settings → Run doctor**. If the problem remains, reproduce it once and immediately use
@@ -27,12 +28,28 @@ log are more useful than another reinstall.
 
 **Install models** updates the Codex route, but a running Codex process keeps its old model catalog.
 Fully quit every Codex Desktop window and Codex CLI process, then reopen Codex while the launcher is
-still running. Open the model picker once so the new process requests `/v1/models`; the launcher
-should then move from **Restart Codex** to a verified catalog state.
+still running. On macOS, the desktop host may be named **ChatGPT**, so quit that app from its menu
+and confirm that its bundled Codex helpers have exited. Open the model picker once so the new process
+requests `/v1/models`; the launcher should then move from **Restart Codex** to a verified catalog
+state.
 
-If the warning remains after that request, check **Activity → Export safe log** and the local
-`/healthz` entry for `successful_model_catalog_requests`. A value of `0` means the desktop host has
-not reached the installed catalog route yet, so another reinstall will not add useful evidence.
+If the warning remains after that request, first use **Activity → Export safe log** for the launcher
+state. Then query the loopback health endpoint directly (replace `17841` if your configured port is
+different):
+
+```bash
+curl -s http://127.0.0.1:17841/healthz
+```
+
+On Windows PowerShell, run:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:17841/healthz |
+  Select-Object version, mode, successful_model_catalog_requests, last_successful_model_catalog_request_at
+```
+
+A `successful_model_catalog_requests` value of `0` means the desktop host has not reached the
+installed catalog route yet, so another reinstall will not add useful evidence.
 
 If the models still do not appear:
 
